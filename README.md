@@ -97,20 +97,6 @@ python -m sage_mamba.cli.train_dreamer --data-dir DREAMER_processed --out-dir re
 
 Use a new `--out-dir` when changing epochs, data, export coverage, or implementation. This folder reorganization changes import statements and therefore the recorded source checksums; use a new output directory for runs from this layout. `--no-save-checkpoints` disables trained-weight export; `--no-save-artifacts` disables graph/attention export. The full workflow keeps both enabled.
 
-## Evaluation definitions
-
-The protocol names have the following definitions in this implementation:
-
-| Name | Train/test split | Reported accuracy |
-| --- | --- | --- |
-| `intra_subject` | Shuffle each participant's selected windows and allocate 80%/20%; pool all training portions to fit one model | Arithmetic mean of participants' test accuracies |
-| `inter_subject` | Pool selected windows from all participants, shuffle, and allocate 80%/20% | Accuracy across the pooled test windows |
-
-The second protocol does **not** hold out participants. Neither protocol holds out complete trials; windows from the same trial may be present in both partitions. There is no LOSO implementation. The `inter_session` SEED condition pools the three sessions before splitting; it is not leave-one-session-out.
-
-The best epoch is selected using the corresponding **test accuracy**, as implemented in `sage_mamba/training.py`. There is no validation partition. Consequently these scores are test-selected rather than estimates from an untouched final test set. Exact split indices, selected epoch, metric, seed, and model parameters are saved with each run. Normalization occurs in the preprocessing stage before window splitting.
-
-Tables use mean ± population standard deviation (`ddof=0`) across the requested seeds, default `42 43 44`. Incomplete cells say `pending`; they are not silently summarized over fewer seeds. SAGE-Mamba is placed last. Dense results are kept separately under `phi_1p0`.
 
 ## Model settings
 
